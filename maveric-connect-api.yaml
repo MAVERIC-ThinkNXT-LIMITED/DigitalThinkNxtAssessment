@@ -749,6 +749,12 @@ components:
       allOf:
         - $ref: '#/components/schemas/PostRequest'
       properties:
+        likesCount:
+          type: integer
+          description: Number of likes on this post
+        commentsCount:
+          type: integer
+          description: Number of comments on this post
         createdAt:
           type: string
           format: date-time
@@ -771,6 +777,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/CommentRequest'
       properties:
+        likesCount:
+          type: integer
+          description: Number of likes on this comment
         createdAt:
           type: string
           format: date-time
