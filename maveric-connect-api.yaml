@@ -6,6 +6,8 @@ info:
 servers:
   - url: http://localhost:3000/api/v1
     description: Local server
+security:
+  - BearerAuth: []
 paths:
   /auth/login:
     post:
@@ -13,6 +15,7 @@ paths:
       tags:
         - Authentication
       operationId: login
+      security: []
       requestBody:
         required: true
         content:
@@ -42,6 +45,7 @@ paths:
       tags:
         - Authentication
       operationId: signup
+      security: []
       requestBody:
         required: true
         content:
@@ -66,6 +70,21 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
   /users:
+    parameters:
+      - name: page
+        in: query
+        required: true
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: true
+        description: Page size
+        schema:
+          type: integer
+          default: 10
     get:
       summary: Returns a list of users.
       description: Returns a list of users.
@@ -206,6 +225,21 @@ paths:
           description: Unexpected error
   /posts:
     get:
+      parameters:
+      - name: page
+        in: query
+        required: true
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: true
+        description: Page size
+        schema:
+          type: integer
+          default: 10
       summary: Returns a list of posts.
       description: Returns a list of posts.
       tags:
@@ -347,6 +381,21 @@ paths:
         schema:
           type: string
     get:
+      parameters:
+        - name: page
+          in: query
+          required: true
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          required: true
+          description: Page size
+          schema:
+            type: integer
+            default: 10
       summary: Returns a list of comments for a particular post.
       description: Returns a list of comments for a particular post.
       tags:
@@ -389,6 +438,36 @@ paths:
                 $ref: '#/components/schemas/Comment'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /posts/{postId}/comments/count:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: The ID of the post to return.
+        schema:
+          type: string
+    get:
+      summary: Returns number of comments on this particular post.
+      description: Returns number of comments on this particular post.
+      tags:
+        - Comments
+      operationId: getCommentsCount
+      responses:
+        '200':    # status code
+          description: Comments count
+          content:
+            text/plain:
+              schema:
+                type: integer
+                default: 0
         '401':
           $ref: '#/components/responses/401Unauthorized'
         '403':
@@ -500,6 +579,21 @@ paths:
         schema:
           type: string
     get:
+      parameters:
+      - name: page
+        in: query
+        required: true
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: true
+        description: Page size
+        schema:
+          type: integer
+          default: 10
       summary: Returns a list of Likes.
       description: Returns a list of Likes.
       tags:
@@ -542,6 +636,36 @@ paths:
                 $ref: '#/components/schemas/Like'
         '400':
           $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /postsOrComments/{postOrCommentId}/likes/count:
+    parameters:
+      - name: postOrCommentId
+        in: path
+        required: true
+        description: Post or Comment Id on which like was made.
+        schema:
+          type: string
+    get:
+      summary: Returns number of likes on this particular post or comment.
+      description: Returns number of likes on this particular post or comment.
+      tags:
+        - Likes
+      operationId: getLkesCount
+      responses:
+        '200':    # status code
+          description: Likes count
+          content:
+            text/plain:
+              schema:
+                type: integer
+                default: 0
         '401':
           $ref: '#/components/responses/401Unauthorized'
         '403':
@@ -617,6 +741,10 @@ paths:
         default:
           description: Unexpected error
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
   responses:
     400BadRequest:
       description: The server could not understand the request due to invalid syntax.
