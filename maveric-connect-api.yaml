@@ -331,6 +331,12 @@ paths:
       tags:
         - Posts
       operationId: updatePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
       responses:
         '200':
           description: Post successfully updated.
