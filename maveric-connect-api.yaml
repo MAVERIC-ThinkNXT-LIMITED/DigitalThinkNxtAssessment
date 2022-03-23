@@ -4,7 +4,7 @@ info:
   description: APIs needed to build Maveric Connect Portal
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/api/v1
+  - url: http://localhost:8000/api/v1
     description: Local server
 security:
   - BearerAuth: []
@@ -73,14 +73,14 @@ paths:
     parameters:
       - name: page
         in: query
-        required: true
+        required: false
         description: Page number
         schema:
           type: integer
           default: 1
       - name: pageSize
         in: query
-        required: true
+        required: false
         description: Page size
         schema:
           type: integer
@@ -223,19 +223,51 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
         default:
           description: Unexpected error
+  /users/{emailId}:
+    parameters:
+      - name: emailId
+        in: path
+        required: true
+        description: User email Id
+        schema:
+          type: string
+    get:
+      summary: Return a user by email.
+      tags:
+        - Users
+      operationId: getUserDetailsByEmail
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
   /posts:
     get:
       parameters:
       - name: page
         in: query
-        required: true
+        required: false
         description: Page number
         schema:
           type: integer
           default: 1
       - name: pageSize
         in: query
-        required: true
+        required: false
         description: Page size
         schema:
           type: integer
@@ -390,14 +422,14 @@ paths:
       parameters:
         - name: page
           in: query
-          required: true
+          required: false
           description: Page number
           schema:
             type: integer
             default: 1
         - name: pageSize
           in: query
-          required: true
+          required: false
           description: Page size
           schema:
             type: integer
@@ -588,14 +620,14 @@ paths:
       parameters:
       - name: page
         in: query
-        required: true
+        required: false
         description: Page number
         schema:
           type: integer
           default: 1
       - name: pageSize
         in: query
-        required: true
+        required: false
         description: Page size
         schema:
           type: integer
@@ -880,9 +912,13 @@ components:
         - postedBy
     Post:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/PostRequest'
       properties:
+        _id:
+          type: string
+        post:
+          type: string
+        postedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
         likesCount:
           type: integer
           description: Number of likes on this post
@@ -908,9 +944,13 @@ components:
         - commentedBy
     Comment:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/CommentRequest'
       properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        commentedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
         likesCount:
           type: integer
           description: Number of likes on this comment
@@ -933,9 +973,13 @@ components:
         - likedBy
     Like:
       type: object
-      allOf:
-        - $ref: '#/components/schemas/LikeRequest'
       properties:
+        _id:
+          type: string
+        postOrCommentId:
+          type: string
+        likedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
         createdAt:
           type: string
           format: date-time
