@@ -223,7 +223,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
         default:
           description: Unexpected error
-  /users/{emailId}:
+  /users/getUserByEmail/{emailId}:
     parameters:
       - name: emailId
         in: path
@@ -466,7 +466,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Comment'
+              $ref: '#/components/schemas/CommentRequest'
       responses:
         '201':
           description: Multiple choice question created successfully
