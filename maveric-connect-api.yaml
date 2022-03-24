@@ -242,7 +242,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserWithoutPassword'
+                $ref: '#/components/schemas/User'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
