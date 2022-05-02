@@ -1,0 +1,933 @@
+openapi: 3.0.0
+info:
+  title: Maveric Bank APIs
+  description: APIs to build Maveric Bank application
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local server
+security:
+  - BearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login user based on email and password
+      tags:
+        - Authentication
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /auth/signup:
+    post:
+      summary: Creates a new user.
+      tags:
+        - Authentication
+      operationId: signup
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /users:
+    parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+    get:
+      summary: Returns a list of users.
+      description: Returns a list of users.
+      tags:
+        - Users
+      operationId: getUsers
+      responses:
+        '200':    # status code
+          description: A JSON array of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/UserWithoutPassword'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Creates a new user.
+      tags:
+        - Users
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: User Id
+        schema:
+          type: string
+    get:
+      summary: Return a user by ID.
+      tags:
+        - Users
+      operationId: getUserDetails
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    put:
+      summary: Update a user by ID.
+      tags:
+        - Users
+      operationId: updateUser
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete a user by ID.
+      tags:
+        - Users
+      operationId: deleteUser
+      responses:
+        '200':
+          description: User successfully deleted
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /users/getUserByEmail/{emailId}:
+    parameters:
+      - name: emailId
+        in: path
+        required: true
+        description: User email Id
+        schema:
+          type: string
+    get:
+      summary: Return a user by email.
+      tags:
+        - Users
+      operationId: getUserDetailsByEmail
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /customers/{customerId}/Accounts:
+    parameters:
+      - name: customerId
+        in: path
+        required: true
+        description: Account owner Customer Id
+        schema:
+          type: string
+    get:
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+      summary: Returns a list of Accounts.
+      description: Returns a list of Accounts.
+      tags:
+        - Accounts
+      operationId: getAccounts
+      responses:
+        '200':    # status code
+          description: A JSON array of Accounts 
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Creates a new account.
+      tags:
+        - Accounts
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '201':
+          description: Account successfully created
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /customers/{customerId}/Accounts/{accountId}:
+    parameters:
+      - name: customerId
+        in: path
+        required: true
+        description: Account owner Customer Id
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        required: true
+        description: Account Id
+        schema:
+          type: string
+    get:
+      summary: Returns account details based on Account Id
+      tags:
+        - Accounts
+      operationId: getAccountDetails
+      responses:
+        '200':
+          description: Account details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetail'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    put:
+      summary: Update account based on Account ID.
+      tags:
+        - Accounts
+      operationId: updateAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '200':
+          description: Account successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete account based on Account Id.
+      tags:
+        - Accounts
+      operationId: deleteAccount
+      responses:
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /accounts/{accountId}/balances:
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Account Id
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size
+          schema:
+            type: integer
+            default: 10
+      summary: Returns a list of balances for a particular account.
+      description: Returns a list of balances for a particular account.
+      tags:
+        - Balances
+      operationId: getBalances
+      responses:
+        '200':    # status code
+          description: A JSON array of Balances
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Balance'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create Balance on a post
+      tags:
+        - Balances
+      operationId: createBalance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceRequest'
+      responses:
+        '201':
+          description: Multiple choice question created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /accounts/{accountId}/balances/{balanceId}:
+    parameters:
+      - name: balanceId
+        in: path
+        required: true
+        description: Balance Id
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        required: true
+        description: Account Id
+        schema:
+          type: string
+    get:
+      summary: Returns balance details based on balance id.
+      description: Returns number of Balances on this particular post.
+      tags:
+        - Balances
+      operationId: getBalancesCount
+      responses:
+        '200':    # status code
+          description: Balances count
+          content:
+            text/plain:
+              schema:
+                type: integer
+                default: 0
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /accounts/{accountId}/transactions:
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Account Id 
+        schema:
+          type: string
+    get:
+      summary: Return transactions  for the given Account Id.
+      tags:
+        - Transactions
+      operationId: getTransactions
+      responses:
+        '200':
+          description: Getting transactions list details was successful.
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    post:
+      summary: Create a transaction for the give Account Id.
+      tags:
+        - Transactions
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Transaction successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /accounts/{accountId}/transactions/{transactionId}:
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Account Id.
+        schema:
+          type: string
+      - name: transactionId
+        in: path
+        required: true
+        description: Transaction Id.
+        schema:
+          type: string
+    get:
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+      summary: Returns a list of Transactions.
+      description: Returns a list of Transactions.
+      tags:
+        - Transactions
+      operationId: getTransactionDetails
+      responses:
+        '200':    # status code
+          description: A JSON array of Transactions
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Transaction'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    put:
+      summary: Creates a new Transaction.
+      tags:
+        - Transactions
+      operationId: updateTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '201':
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    delete:
+      summary: Delete transaction by id.
+      tags:
+        - Transactions
+      operationId: deleteTransaction
+      responses:
+        '200':
+          description: Transaction deleted successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http    
+      scheme: bearer
+  responses:
+    400BadRequest:
+      description: The server could not understand the request due to invalid syntax.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    401Unauthorized:
+      description: Unauthorized. The client must authenticate itself to get the requested response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    403Forbidden:
+      description: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. UnTransaction 401, the client's identity is known to the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    404NotFound:
+      description: The server can not find the requested resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    405MethodNotAllowed:
+      description: The request method is known by the server but is not supported by the target resource. For example, an API may forbid DELETE-ing a resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    500InternalServerError:
+      description: The server has encountered a situation it doesn't know how to handle..
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    503ServiceUnavailable:
+      description: The server is not ready to handle the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+        user:
+          $ref: '#/components/schemas/UserWithoutPassword'
+    UserWithoutPassword:
+      properties:
+        _id:
+          type: string
+          description: Autogenerated user id. Will be empty for create user request
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum: ["MALE", "FEMALE"]
+    User:
+      type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/UserWithoutPassword'
+      properties:
+        password:
+          type: string
+          format: password
+      required:
+        - firstName
+        - lastName
+        - email
+        - phoneNumber
+        - employeeId
+        - password
+    AccountRequest:
+      properties:
+        _id:
+          type: string
+        type:
+          type: string
+          enum: ['CURRENT', 'SAVINGS']
+          description: Type of account current, savings etc
+        customerId:
+          type: string
+          description: Account owner's customer id.
+      required:  
+        - type
+        - customerId
+    Account:
+      type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/AccountRequest'
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    AccountDetail:
+      type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/Account'
+      properties:
+        _id:
+          type: string
+        balance:
+          $ref: '#/components/schemas/Balance'
+    BalanceRequest:
+      properties:
+        _id:
+          type: string
+          description: Autogenerated balance object Id
+        amount:
+          type: string
+          description: Account balance amount
+        currency:
+          type: string
+          enum: ['INR', 'DOLLAR', 'EURO']
+        accountId:
+          type: string
+          description: Account Id to which this balance belongs to
+      required:  
+        - amount
+        - currency
+        - accountId
+    Balance:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated balance object Id
+        amount:
+          type: string
+          description: Account balance amount
+        currency:
+          type: string
+          enum: ['INR', 'DOLLAR', 'EURO']
+        accountId:
+          type: string
+          description: Account Id to which this balance belongs to
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TransactionRequest:
+      properties:
+        _id:
+          type: string
+          description: Autogenerated unique transaction object id
+        accountId:
+          type: string
+          description: Account Id to which this transaction belongs to
+        type:
+          type: string
+          enum: ['CREDIT', 'DEBIT']
+          description: Type of transaction credit, debit etc
+        amount:
+          type: number
+          format: float
+          description: Transaction amount
+      required:  
+        - accountId
+        - type
+        - amount
+    Transaction:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated unique transaction object id
+        accountId:
+          type: string
+          description: Account Id to which this transaction belongs to
+        type:
+          type: string
+          enum: ['CREDIT', 'DEBIT']
+          description: Type of transaction credit, debit etc
+        amount:
+          type: number
+          format: float
+          description: Transaction amount
+        createdAt:
+          type: string
+          format: date-time

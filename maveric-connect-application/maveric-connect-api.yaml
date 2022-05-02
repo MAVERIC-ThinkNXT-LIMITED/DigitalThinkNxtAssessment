@@ -1,0 +1,979 @@
+openapi: 3.0.0
+info:
+  title: Maveric Connect API
+  description: APIs needed to build Maveric Connect Website
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local server
+security:
+  - BearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login user based on email and password
+      tags:
+        - Authentication
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /auth/signup:
+    post:
+      summary: Creates a new user.
+      tags:
+        - Authentication
+      operationId: signup
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /users:
+    parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+    get:
+      summary: Returns a list of users.
+      description: Returns a list of users.
+      tags:
+        - Users
+      operationId: getUsers
+      responses:
+        '200':    # status code
+          description: A JSON array of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/UserWithoutPassword'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Creates a new user.
+      tags:
+        - Users
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /users/{userId}:
+    parameters:
+      - name: userId
+        in: path
+        required: true
+        description: User Id
+        schema:
+          type: string
+    get:
+      summary: Return a user by ID.
+      tags:
+        - Users
+      operationId: getUserDetails
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    put:
+      summary: Update a user by ID.
+      tags:
+        - Users
+      operationId: updateUser
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWithoutPassword'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete a user by ID.
+      tags:
+        - Users
+      operationId: deleteUser
+      responses:
+        '200':
+          description: User successfully deleted
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /users/getUserByEmail/{emailId}:
+    parameters:
+      - name: emailId
+        in: path
+        required: true
+        description: User email Id
+        schema:
+          type: string
+    get:
+      summary: Return a user by email.
+      tags:
+        - Users
+      operationId: getUserDetailsByEmail
+      responses:
+        '200':
+          description: A user object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /posts:
+    get:
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+      summary: Returns a list of posts.
+      description: Returns a list of posts.
+      tags:
+        - Posts
+      operationId: getPosts
+      responses:
+        '200':    # status code
+          description: A JSON array of posts 
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Creates a new post.
+      tags:
+        - Posts
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Subject created successfully
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /posts/{postId}:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: The ID of the post to return.
+        schema:
+          type: string
+    get:
+      summary: Returns a post by ID.
+      tags:
+        - Posts
+      operationId: getPostDetails
+      responses:
+        '200':
+          description: A Post object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    put:
+      summary: Update post by ID.
+      tags:
+        - Posts
+      operationId: updatePost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '200':
+          description: Post successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete post by ID.
+      tags:
+        - Posts
+      operationId: deletePost
+      responses:
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /posts/{postId}/comments:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: The ID of the post to return.
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: Page number
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size
+          schema:
+            type: integer
+            default: 10
+      summary: Returns a list of comments for a particular post.
+      description: Returns a list of comments for a particular post.
+      tags:
+        - Comments
+      operationId: getComments
+      responses:
+        '200':    # status code
+          description: A JSON array of comments
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Comment'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create comment on a post
+      tags:
+        - Comments
+      operationId: createComment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '201':
+          description: Multiple choice question created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /posts/{postId}/comments/count:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: The ID of the post to return.
+        schema:
+          type: string
+    get:
+      summary: Returns number of comments on this particular post.
+      description: Returns number of comments on this particular post.
+      tags:
+        - Comments
+      operationId: getCommentsCount
+      responses:
+        '200':    # status code
+          description: Comments count
+          content:
+            text/plain:
+              schema:
+                type: integer
+                default: 0
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /posts/{postId}/comments/{commentId}:
+    parameters:
+      - name: postId
+        in: path
+        required: true
+        description: Post Id 
+        schema:
+          type: string
+      - name: commentId
+        in: path
+        required: true
+        description: Comment Id 
+        schema:
+          type: string
+    get:
+      summary: Return comment details for the given comment id.
+      tags:
+        - Comments
+      operationId: getCommentDetails
+      responses:
+        '200':
+          description: Getting comment details was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    put:
+      summary: Update comment based on comment id.
+      tags:
+        - Comments
+      operationId: updateComment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentRequest'
+      responses:
+        '200':
+          description: Comment updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete comment by id.
+      tags:
+        - Comments
+      operationId: deleteComment
+      responses:
+        '200':
+          description: Comment deleted successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+  /postsOrComments/{postOrCommentId}/likes:
+    parameters:
+      - name: postOrCommentId
+        in: path
+        required: true
+        description: Post or Comment Id.
+        schema:
+          type: string
+    get:
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Page number
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        description: Page size
+        schema:
+          type: integer
+          default: 10
+      summary: Returns a list of Likes.
+      description: Returns a list of Likes.
+      tags:
+        - Likes
+      operationId: getLikes
+      responses:
+        '200':    # status code
+          description: A JSON array of Likes
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Like'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Creates a new like.
+      tags:
+        - Likes
+      operationId: createLike
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikeRequest'
+      responses:
+        '201':
+          description: Like created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /postsOrComments/{postOrCommentId}/likes/count:
+    parameters:
+      - name: postOrCommentId
+        in: path
+        required: true
+        description: Post or Comment Id on which like was made.
+        schema:
+          type: string
+    get:
+      summary: Returns number of likes on this particular post or comment.
+      description: Returns number of likes on this particular post or comment.
+      tags:
+        - Likes
+      operationId: getLkesCount
+      responses:
+        '200':    # status code
+          description: Likes count
+          content:
+            text/plain:
+              schema:
+                type: integer
+                default: 0
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /postsOrComments/{postOrCommentId}/likes/{likeId}:
+    parameters:
+      - name: postOrCommentId
+        in: path
+        required: true
+        description: Post or Comment Id.
+        schema:
+          type: string
+      - name: likeId
+        in: path
+        required: true
+        description: Like Id.
+        schema:
+          type: string
+    get:
+      summary: Returns like details
+      tags:
+        - Likes
+      operationId: getLikeDetails
+      responses:
+        '200':
+          description: Getting Like details was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Remove like from a post or comment
+      tags:
+        - Likes
+      operationId: removeLike
+      responses:
+        '200':
+          description: Like has been successfully removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Like'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  responses:
+    400BadRequest:
+      description: The server could not understand the request due to invalid syntax.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    401Unauthorized:
+      description: Unauthorized. The client must authenticate itself to get the requested response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    403Forbidden:
+      description: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. Unlike 401, the client's identity is known to the server.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    404NotFound:
+      description: The server can not find the requested resource
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    405MethodNotAllowed:
+      description: The request method is known by the server but is not supported by the target resource. For example, an API may forbid DELETE-ing a resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    500InternalServerError:
+      description: The server has encountered a situation it doesn't know how to handle..
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    503ServiceUnavailable:
+      description: The server is not ready to handle the request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+        user:
+          $ref: '#/components/schemas/UserWithoutPassword'
+    UserWithoutPassword:
+      properties:
+        _id:
+          type: string
+          description: Autogenerated user id. Will be empty for create user request
+        firstName:
+          type: string
+        lastName:
+          type: string
+        middleName:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum: ["MALE", "FEMALE"]
+    User:
+      type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/UserWithoutPassword'
+      properties:
+        password:
+          type: string
+          format: password
+      required:
+        - firstName
+        - lastName
+        - email
+        - phoneNumber
+        - password
+    PostRequest:
+      properties:
+        _id:
+          type: string
+        post:
+          type: string
+        postedBy:
+          type: string
+      required:  
+        - post
+        - postedBy
+    Post:
+      type: object
+      properties:
+        _id:
+          type: string
+        post:
+          type: string
+        postedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
+        likesCount:
+          type: integer
+          description: Number of likes on this post
+        commentsCount:
+          type: integer
+          description: Number of comments on this post
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CommentRequest:
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        commentedBy:
+          type: string
+      required:  
+        - comment
+        - commentedBy
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        commentedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
+        likesCount:
+          type: integer
+          description: Number of likes on this comment
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    LikeRequest:
+      properties:
+        _id:
+          type: string
+        postOrCommentId:
+          type: string
+        likedBy:
+          type: string
+      required:  
+        - postOrCommentId
+        - likedBy
+    Like:
+      type: object
+      properties:
+        _id:
+          type: string
+        postOrCommentId:
+          type: string
+        likedBy:
+          $ref: '#/components/schemas/UserWithoutPassword'
+        createdAt:
+          type: string
+          format: date-time

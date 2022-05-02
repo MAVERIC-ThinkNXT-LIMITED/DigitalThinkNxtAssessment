@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Maveric Connect API
-  description: APIs needed to build Maveric Connect Portal
+  title: Maveric eComm app API
+  description: APIs needed to build Maveric eComm App
   version: 1.0.0
 servers:
   - url: http://localhost:8000/api/v1
@@ -255,7 +255,7 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  /posts:
+  /products:
     get:
       parameters:
       - name: page
@@ -272,20 +272,20 @@ paths:
         schema:
           type: integer
           default: 10
-      summary: Returns a list of posts.
-      description: Returns a list of posts.
+      summary: Returns a list of products.
+      description: Returns a list of products.
       tags:
-        - Posts
-      operationId: getPosts
+        - Products
+      operationId: getProducts
       responses:
         '200':    # status code
-          description: A JSON array of posts 
+          description: A JSON array of products 
           content:
             application/json:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Post'
+                  $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -299,21 +299,21 @@ paths:
     post:
       summary: Creates a new post.
       tags:
-        - Posts
-      operationId: createPost
+        - Products
+      operationId: createProduct
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostRequest'
+              $ref: '#/components/schemas/ProductRequest'
       responses:
         '201':
-          description: Subject created successfully
+          description: Product successfully created
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/Post'
+                $ref: '#/components/schemas/ProductRequest'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -324,26 +324,26 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  /posts/{postId}:
+  /products/{productId}:
     parameters:
-      - name: postId
+      - name: productId
         in: path
         required: true
-        description: The ID of the post to return.
+        description: The ID of the product to return.
         schema:
           type: string
     get:
-      summary: Returns a post by ID.
+      summary: Returns a product by ID.
       tags:
-        - Posts
-      operationId: getPostDetails
+        - Products
+      operationId: getProductDetails
       responses:
         '200':
-          description: A Post object.
+          description: Product details for the given productId
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -361,21 +361,21 @@ paths:
     put:
       summary: Update post by ID.
       tags:
-        - Posts
-      operationId: updatePost
+        - Products
+      operationId: updateProduct
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostRequest'
+              $ref: '#/components/schemas/ProductRequest'
       responses:
         '200':
-          description: Post successfully updated.
+          description: Product successfully updated.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: '#/components/schemas/Product'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -393,8 +393,8 @@ paths:
     delete:
       summary: Delete post by ID.
       tags:
-        - Posts
-      operationId: deletePost
+        - Products
+      operationId: deleteProduct
       responses:
         '400':
           $ref: '#/components/responses/400BadRequest'
@@ -410,14 +410,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
         default:
           description: Unexpected error
-  /posts/{postId}/comments:
-    parameters:
-      - name: postId
-        in: path
-        required: true
-        description: The ID of the post to return.
-        schema:
-          type: string
+  /catalogs:
     get:
       parameters:
         - name: page
@@ -434,20 +427,20 @@ paths:
           schema:
             type: integer
             default: 10
-      summary: Returns a list of comments for a particular post.
-      description: Returns a list of comments for a particular post.
+      summary: Returns a list of catalogs.
+      description: Returns a list of catalogs.
       tags:
-        - Comments
+        - Catalog
       operationId: getComments
       responses:
         '200':    # status code
-          description: A JSON array of comments
+          description: A JSON array of catalogs
           content:
             application/json:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Comment'
+                  $ref: '#/components/schemas/Catalog'
         '401':
           $ref: '#/components/responses/401Unauthorized'
         '403':
@@ -459,21 +452,21 @@ paths:
     post:
       summary: Create comment on a post
       tags:
-        - Comments
+        - Catalog
       operationId: createComment
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CommentRequest'
+              $ref: '#/components/schemas/CatalogRequest'
       responses:
         '201':
           description: Multiple choice question created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/Catalog'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -484,62 +477,26 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  /posts/{postId}/comments/count:
+  /catalogs/{catalogId}:
     parameters:
-      - name: postId
+      - name: catalogId
         in: path
         required: true
-        description: The ID of the post to return.
+        description: Catalog Id 
         schema:
           type: string
     get:
-      summary: Returns number of comments on this particular post.
-      description: Returns number of comments on this particular post.
+      summary: Return comment details for the given catalog id.
       tags:
-        - Comments
-      operationId: getCommentsCount
-      responses:
-        '200':    # status code
-          description: Comments count
-          content:
-            text/plain:
-              schema:
-                type: integer
-                default: 0
-        '401':
-          $ref: '#/components/responses/401Unauthorized'
-        '403':
-          $ref: '#/components/responses/403Forbidden'
-        '500':
-          $ref: '#/components/responses/500InternalServerError'
-        '503':
-          $ref: '#/components/responses/503ServiceUnavailable'
-  /posts/{postId}/comments/{commentId}:
-    parameters:
-      - name: postId
-        in: path
-        required: true
-        description: Post Id 
-        schema:
-          type: string
-      - name: commentId
-        in: path
-        required: true
-        description: Comment Id 
-        schema:
-          type: string
-    get:
-      summary: Return comment details for the given comment id.
-      tags:
-        - Comments
-      operationId: getCommentDetails
+        - Catalog
+      operationId: getCatalogDetails
       responses:
         '200':
-          description: Getting comment details was successful.
+          description: Getting catalog details was successful.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/Catalog'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -555,23 +512,23 @@ paths:
         default:
           description: Unexpected error
     put:
-      summary: Update comment based on comment id.
+      summary: Update catalog based on catalog id.
       tags:
-        - Comments
-      operationId: updateComment
+        - Catalog
+      operationId: updateCatalog
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CommentRequest'
+              $ref: '#/components/schemas/CatalogRequest'
       responses:
         '200':
-          description: Comment updated successfully
+          description: Catalog updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Comment'
+                $ref: '#/components/schemas/Catalog'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -587,13 +544,13 @@ paths:
         default:
           description: Unexpected error
     delete:
-      summary: Delete comment by id.
+      summary: Delete catalog by id.
       tags:
-        - Comments
-      operationId: deleteComment
+        - Catalog
+      operationId: deleteCatalog
       responses:
         '200':
-          description: Comment deleted successfully.
+          description: Catalog deleted successfully.
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -608,44 +565,22 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
         default:
           description: Unexpected error
-  /postsOrComments/{postOrCommentId}/likes:
-    parameters:
-      - name: postOrCommentId
-        in: path
-        required: true
-        description: Post or Comment Id.
-        schema:
-          type: string
+  /orders:
     get:
-      parameters:
-      - name: page
-        in: query
-        required: false
-        description: Page number
-        schema:
-          type: integer
-          default: 1
-      - name: pageSize
-        in: query
-        required: false
-        description: Page size
-        schema:
-          type: integer
-          default: 10
-      summary: Returns a list of Likes.
-      description: Returns a list of Likes.
+      summary: Returns a list of orders.
+      description: Returns a list of orders.
       tags:
-        - Likes
-      operationId: getLikes
+        - Orders
+      operationId: getOrders
       responses:
         '200':    # status code
-          description: A JSON array of Likes
+          description: A JSON array of orders
           content:
             application/json:
               schema: 
                 type: array
                 items: 
-                  $ref: '#/components/schemas/Like'
+                  $ref: '#/components/schemas/Order'
         '401':
           $ref: '#/components/responses/401Unauthorized'
         '403':
@@ -655,23 +590,23 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
-      summary: Creates a new like.
+      summary: Creates a new order.
       tags:
-        - Likes
-      operationId: createLike
+        - Orders
+      operationId: createOrder
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LikeRequest'
+              $ref: '#/components/schemas/OrderRequest'
       responses:
         '201':
-          description: Like created successfully
+          description: Order created successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Like'
+                $ref: '#/components/schemas/Order'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -682,28 +617,27 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  /postsOrComments/{postOrCommentId}/likes/count:
+  /orders/{orderId}:
     parameters:
-      - name: postOrCommentId
+      - name: orderId
         in: path
         required: true
-        description: Post or Comment Id on which like was made.
+        description: Order Id.
         schema:
           type: string
     get:
-      summary: Returns number of likes on this particular post or comment.
-      description: Returns number of likes on this particular post or comment.
+      summary: Returns order details based on order id
+      description: Returns order details based on order id
       tags:
-        - Likes
-      operationId: getLkesCount
+        - Orders
+      operationId: getOrderDetails
       responses:
-        '200':    # status code
-          description: Likes count
+        '200':
+          description: Getting order details was successful.
           content:
-            text/plain:
+            application/json:
               schema:
-                type: integer
-                default: 0
+                $ref: '#/components/schemas/Order'
         '401':
           $ref: '#/components/responses/401Unauthorized'
         '403':
@@ -712,32 +646,18 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
-  /postsOrComments/{postOrCommentId}/likes/{likeId}:
-    parameters:
-      - name: postOrCommentId
-        in: path
-        required: true
-        description: Post or Comment Id.
-        schema:
-          type: string
-      - name: likeId
-        in: path
-        required: true
-        description: Like Id.
-        schema:
-          type: string
-    get:
-      summary: Returns like details
+    put:
+      summary: Update order details
       tags:
-        - Likes
-      operationId: getLikeDetails
+        - Orders
+      operationId: updateOrderDetails
       responses:
         '200':
-          description: Getting Like details was successful.
+          description: Updating order details was successful.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Like'
+                $ref: '#/components/schemas/Order'
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -753,17 +673,13 @@ paths:
         default:
           description: Unexpected error
     delete:
-      summary: Remove like from a post or comment
+      summary: delete order
       tags:
-        - Likes
-      operationId: removeLike
+        - Orders
+      operationId: deleteOrder
       responses:
         '200':
-          description: Like has been successfully removed.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Like'
+          description: Order successfully deleted.
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -876,11 +792,6 @@ components:
         dateOfBirth:
           type: string
           format: date
-        employeeId:
-          type: string
-        bloodGroup:
-          type: string
-          enum: ["A+", "A-", "B+", "B-", "O+", "O-"]
         gender:
           type: string
           enum: ["MALE", "FEMALE"]
@@ -897,89 +808,97 @@ components:
         - lastName
         - email
         - phoneNumber
-        - employeeId
         - password
-    PostRequest:
+    ProductRequest:
       properties:
         _id:
           type: string
-        post:
+        name:
           type: string
-        postedBy:
+        description:
           type: string
+        price:
+          type: number
+          description: Product price
+        stockCount:
+          type: number
+          format: integer
       required:  
-        - post
-        - postedBy
-    Post:
+        - name
+        - description
+        - price
+        - stockCount  
+    Product:
       type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/ProductRequest'
       properties:
-        _id:
-          type: string
-        post:
-          type: string
-        postedBy:
-          $ref: '#/components/schemas/UserWithoutPassword'
-        likesCount:
-          type: integer
-          description: Number of likes on this post
-        commentsCount:
-          type: integer
-          description: Number of comments on this post
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-    CommentRequest:
-      properties:
-        _id:
-          type: string
-        comment:
-          type: string
-        commentedBy:
-          type: string
-      required:  
-        - comment
-        - commentedBy
-    Comment:
+    CatalogRequest:
       type: object
       properties:
         _id:
           type: string
-        comment:
+        name:
           type: string
-        commentedBy:
-          $ref: '#/components/schemas/UserWithoutPassword'
-        likesCount:
-          type: integer
-          description: Number of likes on this comment
+        description:
+          type: string
+        images:
+          type: array
+          items: 
+            type: string
+    Catalog:
+      type: object
+      allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
+        - $ref: '#/components/schemas/CatalogRequest'
+      properties:
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-    LikeRequest:
-      properties:
-        _id:
-          type: string
-        postOrCommentId:
-          type: string
-        likedBy:
-          type: string
-      required:  
-        - postOrCommentId
-        - likedBy
-    Like:
+    OrderItem:
+      additionalProperties:
+        type: string
+      example:
+        "12121213": 1
+        "23232333": 2
+    OrderRequest:
       type: object
       properties:
         _id:
           type: string
-        postOrCommentId:
+        items:
+          $ref: '#/components/schemas/OrderItem'
+        customerId:
           type: string
-        likedBy:
-          $ref: '#/components/schemas/UserWithoutPassword'
+          description: Customer Id 
+      required:  
+        - items
+        - customerId
+    Order:
+      type: object
+      properties:
+        _id:
+          type: string
+        status:
+          type: string
+          enum: ['CREATED', 'CONFIRMED', 'DECLINED', 'DELIVERED']
+        items:
+          $ref: '#/components/schemas/OrderItem'
+        value:
+          type: number
+          format: float
+          description: Total value of the order
         createdAt:
+          type: string
+          format: date-time
+        updatedAt:
           type: string
           format: date-time
