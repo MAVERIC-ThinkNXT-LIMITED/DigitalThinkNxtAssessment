@@ -30,7 +30,7 @@ Maveric Panel is also expected to review the assignment code mainily keeping bel
 interdependent services for tracing the chained service calls
 10) Feign client based service to service communication is handled properly or not
 11) Whether all app components like Gateway, Eureka Service, Core Microservices, MongoDb, MySQL are containerised or not. For databases volume mounting been done or not
-12)API implementation is adhering to respective endpoint definition in the swagger file (Request, Response, path, error codes etc)
+13)API implementation is adhering to respective endpoint definition in the swagger file (Request, Response, path, error codes etc)
 
 Both external trainers as well as internal panel are expected to rate the candidates performance separately. 
 Then can rank the individuals as Very Good, Average, Need Improvement and also need to provide improvement suggestion
