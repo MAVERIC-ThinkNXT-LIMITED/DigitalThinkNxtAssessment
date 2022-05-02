@@ -26,11 +26,11 @@ Maveric Panel is also expected to review the assignment code mainily keeping bel
 5) Postman collection for each end point in each of the microservice
 6) All completed API calls are working properly from the API gateway
 7) Except login and signup all the other APIs are secured via JWT token 
-8) All the API request and response are being logged to ELK along with the Correlation ID. Same corelation id needs to be passed across 
-interdependent services for tracing the chained service calls
-10) Feign client based service to service communication is handled properly or not
-11) Whether all app components like Gateway, Eureka Service, Core Microservices, MongoDb, MySQL are containerised or not. For databases volume mounting been done or not
-12)API implementation is adhering to respective endpoint definition in the swagger file (Request, Response, path, error codes etc)
+8) All the API request and response are being logged to ELK along with the Correlation ID. Same corelation id needs to be passed across interdependent services for tracing the chained service calls
+9) Feign client must be used for  service to service communication
+10) Whether all app components like Gateway, Eureka Service, Core Microservices, MongoDb, MySQL are containerised or not.For databases volume mounting been done
+11) Pagination has been handled or not 
+12) API implementation is adhering to respective endpoint definition in the swagger file (Request, Response, path, error codes etc)
 
 Both external trainers as well as internal panel are expected to rate the candidates performance separately. 
 Then can rank the individuals as Very Good, Average, Need Improvement and also need to provide improvement suggestion
