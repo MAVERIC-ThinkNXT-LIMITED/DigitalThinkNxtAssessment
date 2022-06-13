@@ -409,6 +409,8 @@ paths:
         - Accounts
       operationId: deleteAccount
       responses:
+        '200':
+          description: Account deleted successfully.
         '400':
           $ref: '#/components/responses/400BadRequest'
         '401':
@@ -513,10 +515,10 @@ paths:
           type: string
     get:
       summary: Returns balance details based on balance id.
-      description: Returns number of Balances on this particular post.
+      description: Returns balance details based on balance id.
       tags:
         - Balances
-      operationId: getBalancesCount
+      operationId: getBalanceDetails
       responses:
         '200':    # status code
           description: Balances count
@@ -533,6 +535,60 @@ paths:
           $ref: '#/components/responses/500InternalServerError'
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
+    put:
+      summary: Update account based on Ac
+      tags:
+      - Balances
+      operationId: updateBalance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BalanceRequest'
+      responses:
+        '200':
+          description: Balance successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Balance'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
+    delete:
+      summary: Delete account based on Ac
+      tags:
+      - Balances
+      operationId: deleteBalance
+      responses:
+        '200':
+          description: Balance deleted successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+        default:
+          description: Unexpected error
   /accounts/{accountId}/transactions:
     parameters:
       - name: accountId
@@ -615,23 +671,8 @@ paths:
         schema:
           type: string
     get:
-      parameters:
-      - name: page
-        in: query
-        required: false
-        description: Page number
-        schema:
-          type: integer
-          default: 1
-      - name: pageSize
-        in: query
-        required: false
-        description: Page size
-        schema:
-          type: integer
-          default: 10
-      summary: Returns a list of Transactions.
-      description: Returns a list of Transactions.
+      summary: Returns transaction details.
+      description: Returns transaction details.
       tags:
         - Transactions
       operationId: getTransactionDetails
@@ -721,7 +762,7 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
     403Forbidden:
-      description: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. UnTransaction 401, the client's identity is known to the server.
+      description: The client does not have access rights to the content; that is, it is unauthorized, so the server is refusing to give the requested resource. 
       content:
         application/json:
           schema:
