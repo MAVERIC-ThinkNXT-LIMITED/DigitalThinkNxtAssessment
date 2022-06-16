@@ -1,0 +1,10 @@
+account-service/
+authentication-authorization-service/
+balance-service/
+eureka-service/
+gateway-service/
+transaction-service/
+.DS_Store
+maveric-bank-application/~$lutionDocument.docx
+~$gitalPhase3Assessment.docx
+code/
