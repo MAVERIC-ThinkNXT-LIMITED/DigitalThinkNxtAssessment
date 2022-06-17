@@ -43,7 +43,7 @@ Peer reviewer and mentors are expected to review the assignment code mainily kee
 13) Error handling is for all the endpoints </br>
 
 Both trainers as well as mentors are expected to rate the trainees performance separately. 
-They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling points of improvement needs to be shared.
+They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling  improvement points needs to be shared.
 
 
 
