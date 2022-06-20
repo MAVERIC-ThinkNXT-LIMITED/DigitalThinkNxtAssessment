@@ -1,1 +1,166 @@
-.
+version: "3.8"
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    hostname: mongo
+    restart: unless-stopped
+    ports:
+      - $MONGO_HOST_PORT:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_DB
+      - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
+      - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
+    volumes:
+      - $MONGO_DATA_HOST_PATH:/data/db/
+      - $MONGO_LOG_HOST_PATH:/var/log/mongodb/
+      - $MONGO_INITDB_SCRIPTS_HOST_PATH:/docker-entrypoint-initdb.d/
+    networks:
+      - main-network
+    command: ["--bind_ip", "0.0.0.0"]
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - main-network
+  eureka-service:
+    build:
+      context: ../code/eureka-service
+      dockerfile: Dockerfile
+    image: eureka-service
+    container_name: eureka-service
+    restart: on-failure
+    ports:
+      - 8761:8761
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=eureka-service
+    networks:
+      - main-network
+  gateway-service:
+    build:
+      context: ../code/gateway-service
+      dockerfile: Dockerfile
+    image: gateway-service
+    container_name: gateway-service
+    restart: on-failure
+    ports:
+      - 8000:8000
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=gateway-service
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
+    networks:
+      - main-network
+  user-service:
+    build:
+      context: ../code/user-service
+      dockerfile: Dockerfile
+    image: user-service
+    container_name: user-service
+    restart: on-failure
+    depends_on:
+      - mongo
+    ports:
+      - 3005:3005
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=user-service
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_AUTO_INDEX_CREATION=$MONGO_AUTO_INDEX_CREATION
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=$MONGO_ROOT_USERNAME
+      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_ROOT_PASSWORD
+      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+    networks:
+      - main-network
+  account-service:
+    build:
+      context: ../code/account-service
+      dockerfile: Dockerfile
+    image: account-service
+    container_name: account-service
+    restart: on-failure
+    depends_on:
+      - mongo
+    ports:
+      - 3010:3010
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=account-service
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_AUTO_INDEX_CREATION=$MONGO_AUTO_INDEX_CREATION
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=$MONGO_ROOT_USERNAME
+      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_ROOT_PASSWORD
+      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+    networks:
+      - main-network
+  balance-service:
+    build:
+      context: ../code/balance-service
+      dockerfile: Dockerfile
+    image: balance-service
+    container_name: balance-service
+    restart: on-failure
+    depends_on:
+      - mongo
+    ports:
+      - 3015:3015
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=balance-service
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_AUTO_INDEX_CREATION=$MONGO_AUTO_INDEX_CREATION
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=$MONGO_ROOT_USERNAME
+      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_ROOT_PASSWORD
+      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+    networks:
+      - main-network
+  transaction-service:
+    build:
+      context: ../code/transaction-service
+      dockerfile: Dockerfile
+    image: transaction-service
+    container_name: transaction-service
+    restart: on-failure
+    depends_on:
+      - mongo
+    ports:
+      - 3020:3020
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=transaction-service
+      - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_AUTO_INDEX_CREATION=$MONGO_AUTO_INDEX_CREATION
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_USERNAME=$MONGO_ROOT_USERNAME
+      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_ROOT_PASSWORD
+      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+    networks:
+      - main-network
+networks:
+  main-network:
+    external:
+      name: $NETWORK_NAME
+volumes:
+  db:

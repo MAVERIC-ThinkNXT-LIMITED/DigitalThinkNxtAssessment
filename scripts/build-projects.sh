@@ -1,23 +1,23 @@
-echo -------------- building docker image for gateway-service --------------
+echo -------------- building  gateway-service --------------
 cd ../code/gateway-service
 pwd
-./mvnw package
-echo -------------- building docker image for eureka service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  eureka service --------------
 cd ../eureka-service
 pwd
-./mvnw package
-echo -------------- building docker image for authentication-authorization service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  authentication-authorization service --------------
 cd ../authentication-authorization-service
-./mvnw package
-echo -------------- building docker image for user-service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  user-service --------------
 cd ../user-service
-./mvnw package
-echo -------------- building docker image for account-service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  account-service --------------
 cd ../account-service 
-./mvnw package
-echo -------------- building docker image for balance service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  balance service --------------
 cd ../balance-service
-./mvnw package
-echo -------------- building docker image for transaction service --------------
+./mvnw -Dmaven.test.skip package
+echo -------------- building  transaction service --------------
 cd ../transaction-service
-./mvnw package
+./mvnw -Dmaven.test.skip package

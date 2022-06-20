@@ -1,2 +1,4 @@
-docker network create main-network
-docker-compose --env-file "./.env" build
+./clone-repos.sh
+./build-projects.sh
+./build-images.sh
+
