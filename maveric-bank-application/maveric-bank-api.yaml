@@ -841,6 +841,13 @@ components:
         gender:
           type: string
           enum: ["MALE", "FEMALE"]
+       required:    
+          - firstName
+          - lastName
+          - email
+          - phoneNumber
+          - address
+          
     UserWithPassword:
       type: object
       allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
