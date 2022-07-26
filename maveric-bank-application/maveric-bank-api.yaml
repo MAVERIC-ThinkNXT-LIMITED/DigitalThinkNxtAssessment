@@ -856,6 +856,8 @@ components:
         password:
           type: string
           format: password
+      required:
+        - password
     User:
       type: object
       allOf: # Combines the main `Pet` schema with `Cat`-specific properties 
