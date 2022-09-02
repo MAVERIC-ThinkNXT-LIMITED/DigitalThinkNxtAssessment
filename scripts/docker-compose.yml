@@ -77,13 +77,9 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_APPLICATION_NAME=user-service
       - SPRING_APPLICATION_JSON={"eureka":{"client":{"serviceUrl":{"defaultZone":"http://eureka-service:8761/eureka"}}}}
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_AUTO_INDEX_CREATION=$MONGO_AUTO_INDEX_CREATION
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_ROOT_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_ROOT_PASSWORD
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - MYSQLDB_DATABASE=maveric-bank-app
+      - MYSQLDB_USER=root
+      - MYSQLDB_ROOT_PASSWORD=123456
     networks:
       - main-network
   account-service:
