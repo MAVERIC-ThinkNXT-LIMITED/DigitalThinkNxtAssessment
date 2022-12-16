@@ -55,37 +55,5 @@ Peer reviewer and mentors are expected to review the assignment code mainily kee
 Both trainers as well as mentors are expected to rate the trainees performance separately. 
 They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling  improvement points needs to be shared.
 
-# Reference materials helpul in completing this assignment:
-
-# Java Springboot
-- https://www.nginx.com/blog/introduction-to-microservices/
-- https://martinfowler.com/articles/microservices.html
-- https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-- https://www.youtube.com/playlist?list=PLTyWtrsGknYegrUmDZB6rcqMotOFZKvbn
-- https://www.youtube.com/playlist?list=PLwvrYc43l1Mwqpf9i-1B1gXfMeHOm6DeY
-- https://spring.io/why-spring
-- https://spring.io/microservices
-- https://spring.io/projects/spring-boot
-
-# API Design
-- https://swagger.io/resources/articles/best-practices-in-api-design/
-- https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
-
-# API security:
-- https://javatechonline.com/how-to-implement-feign-client-in-spring-boot-microservices/
-
-# Angular
-- https://www.udemy.com/course/the-complete-guide-to-angular-2/learn/lecture/13914134?start=0#overview
-- https://www.udemy.com/course/angular-essentials-angular-2-angular-4-with-typescript/
-- https://www.youtube.com/watch?v=5xg4Jvqy_UI\
-- https://www.youtube.com/watch?v=LiOzTQAz13Q&t=56s
-- https://www.youtube.com/watch?v=0eWrpsCLMJQ&list=PLC3y8-rFHvwhBRAgFinJR8KHIrCdTkZcZ&index=1
-- https://www.youtube.com/watch?v=k5E2AVpwsko
-
-# ReactJs
-- https://www.youtube.com/watch?v=QFaFIcGhPoM&list=PLC3y8-rFHvwgg3vaYJgHGnModB54rxOk3
-- https://www.youtube.com/watch?v=VyeA0tVreYw
-- https://www.youtube.com/watch?v=Ke90Tje7VS0
-- https://www.youtube.com/watch?v=0riHps91AzE&t=11s
-- https://www.udemy.com/share/101Wby3@niVSBKu_8kxii7U92H4UJmTeMxuUo9_VtOayl1e3qXwCosDn0NyLFADUkZp_kgBf/
-
+# For reference materials please refer below link:
+https://github.com/MAVERIC-ThinkNXT-LIMITED/topics-materials
