@@ -64,5 +64,8 @@ They can rank the individuals as Very Good, Good, Average and Below Average. For
   During the course of both Springboot as well as React/Angular training we need to have demos at regular intervals. Frequency of which can be as follows:
     - First week Thursday, Second week's Tuesday and a final demo on Second week's Friday. Incase if there is any slippage due to some genuine issue then Third week's Wednesday and Friday can be used.
 
-# For reference materials please refer below link:
+# Link to reference materials:
+
+Go through the videos and blogs listed in the below github page to get the necessary knowledge required to complete the assignment
+
 https://github.com/MAVERIC-ThinkNXT-LIMITED/topics-materials
