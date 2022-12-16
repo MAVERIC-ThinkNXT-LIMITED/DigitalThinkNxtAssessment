@@ -8,6 +8,10 @@ d) Gitbash</br>
 e) IntelliJ Community Edition</br>
 f) Dockercompose</br>
 g) Postman  </br>
+h) NodeJS  </br>
+i) Angular/ReactJS  </br>
+j) Visual Studio Code  </br>
+
 # DigitalThinkNxtAssessment
 Repo containing details of  Maveric Digital Phase 3 assessments to assess Springboot, Angular/React 
 knowledge of the ThinkNxt program trainees
@@ -41,6 +45,11 @@ Peer reviewer and mentors are expected to review the assignment code mainily kee
 11) Pagination has been handled or not </br>
 12) All API implementation is done and  it is adhering to respective endpoint definition in the swagger file (Request, Response, path, error codes etc). There should not be any deviations. </br>
 13) Error handling is for all the endpoints </br>
+14) UI look and feel should match Maveric branding guidelines refer below screenshot. Pay attention to fonts, spacing, buttn colors
+![Screenshot 2022-12-16 at 2 31 04 PM](https://user-images.githubusercontent.com/9525282/208062172-02ff744b-e94b-499c-b4ba-50bd0b2644be.png)
+![Screenshot 2022-12-16 at 2 31 25 PM](https://user-images.githubusercontent.com/9525282/208062196-26139368-ad60-4f0b-a764-9c68572f859a.png)
+![Screenshot 2022-12-16 at 2 31 30 PM](https://user-images.githubusercontent.com/9525282/208062204-0b042bfb-1ce8-4a87-98a9-a9c4e1798d20.png)
+15)Website flow and content should be same as what has been mentioned in the solution document 
 
 Both trainers as well as mentors are expected to rate the trainees performance separately. 
 They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling  improvement points needs to be shared.
@@ -73,6 +82,9 @@ They can rank the individuals as Very Good, Good, Average and Below Average. For
 - https://www.youtube.com/watch?v=k5E2AVpwsko
 
 # ReactJs
+- https://www.youtube.com/watch?v=QFaFIcGhPoM&list=PLC3y8-rFHvwgg3vaYJgHGnModB54rxOk3
+- https://www.youtube.com/watch?v=VyeA0tVreYw
+- https://www.youtube.com/watch?v=Ke90Tje7VS0
+- https://www.youtube.com/watch?v=0riHps91AzE&t=11s
 - https://www.udemy.com/share/101Wby3@niVSBKu_8kxii7U92H4UJmTeMxuUo9_VtOayl1e3qXwCosDn0NyLFADUkZp_kgBf/
-
 
