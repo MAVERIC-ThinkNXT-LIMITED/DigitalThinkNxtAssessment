@@ -53,7 +53,16 @@ Peer reviewer and mentors are expected to review the assignment code mainily kee
 16)Git branching guidelines must be followed even in case of webapp. For example we can think of following branches feature/header, feature/footer, feature/login, feature/signup, feature/accounts, features/transactions etc
 
 Both trainers as well as mentors are expected to rate the trainees performance separately. 
-They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling  improvement points needs to be shared.
+They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling improvement points needs to be shared on a regular basis.
+
+# Assignment timeline:
+- 2 weeks for Springboot
+- 1 week buffer to complete any backend pending tasks
+- 2 weeks for Angular/ReactJS
+- 1 week buffer to complete any frontend pending tasks
+
+  During the course of both Springboot as well as React/Angular training we need to have demos at regular intervals. Frequency of which can be as follows:
+    - First week Thursday, Second week's Tuesday and a final demo on Second week's Friday. Incase if there is any slippage due to some genuine issue then Third week's Wednesday and Friday can be used.
 
 # For reference materials please refer below link:
 https://github.com/MAVERIC-ThinkNXT-LIMITED/topics-materials
