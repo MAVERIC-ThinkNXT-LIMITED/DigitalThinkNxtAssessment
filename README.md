@@ -50,6 +50,7 @@ Peer reviewer and mentors are expected to review the assignment code mainily kee
 ![Screenshot 2022-12-16 at 2 31 25 PM](https://user-images.githubusercontent.com/9525282/208062196-26139368-ad60-4f0b-a764-9c68572f859a.png)
 ![Screenshot 2022-12-16 at 2 31 30 PM](https://user-images.githubusercontent.com/9525282/208062204-0b042bfb-1ce8-4a87-98a9-a9c4e1798d20.png)
 15)Website flow and content should be same as what has been mentioned in the solution document 
+16)Git branching guidelines must be followed even in case of webapp. For example we can think of following branches feature/header, feature/footer, feature/login, feature/signup, feature/accounts, features/transactions etc
 
 Both trainers as well as mentors are expected to rate the trainees performance separately. 
 They can rank the individuals as Very Good, Good, Average and Below Average. For those people who are struggling  improvement points needs to be shared.
